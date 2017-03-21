@@ -13,7 +13,7 @@ function printf(x)
   function tostring(x) 
     if type(x) == 'table' then
       return ('{' .. table.concat(
-              map(tostring, x), ", ", 1, #x) 
+              map(tostring, x), ", ") 
               .. '}')
     end
     return old_tostring(x)
@@ -27,6 +27,7 @@ print({{'Super'}, 'na', 'zwykłym', 'princie', {{'dziala', {'bo przepisałem tos
 do
   local fibs = {0, 1}
   function fibonacci(n)
+    if n == nil then return tostring(fibs) end
     n = n + 1
     while (n > #fibs) do
       fibs[#fibs + 1] = fibs[#fibs] + fibs[#fibs - 1]
@@ -35,6 +36,7 @@ do
     return fibs[n]
   end
 end
+
 print(fibonacci(0))
 print(fibonacci(1))
 print(fibonacci(2))
@@ -43,3 +45,4 @@ print(fibonacci(9))
 print(fibonacci(1))
 print(fibonacci(5))
 print(fibs);
+print(fibonacci());
