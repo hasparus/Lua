@@ -11,7 +11,7 @@ function lreverser(source, target)
   if target then 
     local t = io.open(target, "r") 
     if t ~= nil then
-      io.stdout:write(target .. ' file exists. Do you want to overwrite it?')
+      io.stdin:write(target .. ' file exists. Do you want to overwrite it?')
 
       local answer = io.stdin:read()
       io.close()
@@ -68,4 +68,4 @@ utf8.reverse = function(s)
   return utf8.char(table.unpack(stack))
 end
 
-lreverser('./source', './target')
+lreverser('source', 'target')
