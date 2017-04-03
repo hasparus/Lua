@@ -10,8 +10,8 @@ function parseLisp(str)
     if matched then return str --[[:match('"%s*(.*)%s*%"')]] end --strip spaces and quotation marks
     matched = str:match('^%s*%d+%s*$')
     if matched then return tonumber(str) end
-    return hash2string{symbol = '"' .. str .. '"'} 
-    -- return {symbol = str}
+    --return hash2string{symbol = '"' .. str .. '"'} 
+    return {symbol = str}
     --psuję parsowanie, żeby to wypisać: 2do na potem, napisać sensowny tostring dla tablic, hashform jesli nie sa sekwencja, arrayform wpp
   end
 end
