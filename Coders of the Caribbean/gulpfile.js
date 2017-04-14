@@ -4,13 +4,13 @@ const gulp = require('gulp');
 const concat = require("gulp-concat");
  
 const luafiles = [
-        './agent.lua',
-        './exec.lua'
+        './src/agent.lua',
+        './src/exec.lua'
       ];
 
 gulp.task('concat-lua', function() {
   return gulp.src(luafiles)
-    .pipe(concat({ path: 'main.lua' }))
+    .pipe(concat({ path: 'joint.lua' }))
     .pipe(gulp.dest('./'));
 });
 

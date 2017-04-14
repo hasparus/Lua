@@ -2,14 +2,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Ravi Debugger",
+            "name": "launch",
             "type": "lua",
             "request": "launch",
-            "program": "${workspaceRoot}/main.lua",
             "stopOnEntry": true,
+            "program": "${workspaceRoot}/src/main.lua",
             "cwd": "${workspaceRoot}",
-            "LUA_PATH": "${workspaceRoot}/?.lua",
-            "LUA_CPATH": "${workspaceRoot}/?.dll"
+            "path": "${workspaceRoot}/?.lua",
+            "cpath": "${workspaceRoot}/?.dll",
+            "arg": [],
+            "console": "utf8"
         }
     ]
 }

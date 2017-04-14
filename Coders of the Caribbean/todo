@@ -1,0 +1,4 @@
+Prepare Object and Vector2 tables and metatables
+for nice prototype based inheritance
+
+then you can treat Entities as Objects
