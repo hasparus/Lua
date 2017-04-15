@@ -19,7 +19,7 @@ function Object.new(args)
   return self
 end
 
-mt.Object.__call = function(table, ...) return Object.new(...) end
+mt.Object.__call = function(table, ...) return table.new(...) end
 --]]
 
 ---[[ __tostring and __concat

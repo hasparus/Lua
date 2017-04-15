@@ -18,7 +18,7 @@ local complexTests = {
 }
 
 ObjectTest.execute = function()
-  print('Running tests: ')
+  print('Running Object tests: ')
   for i, v in ipairs(simpleTests) do
     load('res = ' .. v)()
     print(string.format('| %3d | ', i),
