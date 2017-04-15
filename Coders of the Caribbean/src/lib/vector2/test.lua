@@ -10,7 +10,7 @@ local simpleTests = {
   [[ Vector2(2, 1) + Vector2(3,2)]],
   [[ Vector2(3, 4):magnitude() ]],
   [[ Vector2(-7, 6):magnitude() ]],
-  [[ Vector2(3, 4):distance(Vector2(-7, 6))]]
+  {[[ Vector2(3, 4):distance(Vector2(-7, 6)) ]], {shouldBe = 10.198039}}
 }
 
 local complexTests = {

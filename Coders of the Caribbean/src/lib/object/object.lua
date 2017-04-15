@@ -43,8 +43,10 @@ setmetatable(Object, mt.Object)
 --]]
 
 ---[[ Factory function and constructor syntax:
-function Object.new(args)
-  local self = { __type = 'object' }
+function Object.new(args, params)
+  local self = {}
+  if not params or 
+     not params.notype then self.__type = 'object' end 
   for k, v in pairs(args) do
     self[k] = v
   end

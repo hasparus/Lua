@@ -2,11 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "launch",
+            "name": "Main",
             "type": "lua",
             "request": "launch",
             "stopOnEntry": true,
             "program": "${workspaceRoot}/src/main.lua",
+            "cwd": "${workspaceRoot}",
+            "path": "${workspaceRoot}/?.lua",
+            "cpath": "${workspaceRoot}/?.dll",
+            "arg": [],
+            "console": "utf8"
+        },
+        {
+            "name": "Tests",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": true,
+            "program": "${workspaceRoot}/src/tests.lua",
             "cwd": "${workspaceRoot}",
             "path": "${workspaceRoot}/?.lua",
             "cpath": "${workspaceRoot}/?.dll",
