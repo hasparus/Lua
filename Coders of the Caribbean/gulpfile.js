@@ -4,9 +4,10 @@ const gulp = require('gulp');
 const concat = require("gulp-concat");
  
 const luafiles = [
-        './src/agent.lua',
-        './src/exec.lua'
-      ];
+  './src/lib/object/object.lua',
+  './src/lib/vector2/vector2.lua',
+  './src/pirates/*.lua'
+];
 
 gulp.task('concat-lua', function() {
   return gulp.src(luafiles)
