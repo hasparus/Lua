@@ -1,19 +1,33 @@
+log = function(...)
+  io.stderr:write(...)
+  io.stderr:write('\n')
+end
+
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
     return a
   elseif type(b) == 'table' then
-    return string.format(a, unpack(b))
+    return string.format(a, table.unpack(b))
   else
     return string.format(a, b)
   end
 end
 --]]
 
+---[[ print strings with quotes
+tostringverbose = function(x)
+  if type(x) == 'string' then
+    return '"' .. x .. '"'
+  end
+  return tostring(x)
+end
+--]]
+
 ---[[ Set indirect metatable. [Chain calls, lookup through __index].
 local metamethods = { --no index nor newindex
   '__add', '__sub', '__mul', '__div', '__mod', '__pow', '__unm', '__concat', 
-  '__len', '__eq', '__lt', '__le', '__call', '__gc', '__tostring'
+  '__len', '__eq', '__lt', '__le', '__call', '__tostring'
 }
 
 -- kudos kikito@stackoverflow
@@ -57,18 +71,28 @@ mt.Object.__call = function(table, ...) return table.new(...) end
 
 ---[[ __tostring and __concat
 mt.object.__tostring = function(obj)
+  local joinSpecials = false
   local res = {}
+  local specials = {}
   local n = 0
   for k, v in pairs(obj) do
-    n = n + 1
-    local vstring
-    if (type(v) == type('string')) then
-      vstring = "'" .. v .. "'"
+    local s = tostring(k) .. ' = ' .. tostringverbose(v)
+    if k:match('^__') then
+      specials[#specials + 1] = s
+      if k == '__showAllKeys' then joinSpecials = true end
     else
-      vstring = tostring(v)
+      n = n + 1
+      res[n] = s
     end
-    res[n] = tostring(k) .. ' = ' .. vstring
   end
+
+  if joinSpecials then
+    for _, v in ipairs(specials) do
+      n = n + 1
+      res[n] = v 
+    end
+  end
+
   return '{ ' .. table.concat(res, ', ') .. ' }'
 end
 
@@ -157,6 +181,21 @@ end
 
 
 
+--- past
+
+map = function(fun, tab) 
+    local res = {}
+    for k, v in pairs(tab) do
+        res[k] = fun(v)
+    end 
+    return res 
+end
+
+--- new helpers
+
+function min(x, y)
+  if x < y then return x else return y end
+end
 local read4 = function(next) 
   local results = {}
   for i = 1, 4 do
@@ -164,6 +203,8 @@ local read4 = function(next)
   end
   return table.unpack(results)
 end
+
+Entity = declareClass('Entity', Object)
 
 function agent()
   while true do
@@ -176,10 +217,10 @@ function agent()
     local myShips = {}
     local enemies = {}
     local barrels = {}
-
+    
     for i = 1, entityCount do
         local next_token = string.gmatch(io.read(), "[^%s]+")
-        entity = {}
+        entity = Entity.new {}
 
         entity.Id = tonumber(next_token())
         entity.type = next_token()
@@ -202,12 +243,27 @@ function agent()
         entities[entity.Id] = entity
     end
 
-    for k, v in pairs(entities) do
-      log('entity ' .. k .. ' : ' .. v)
+    for id, entity in pairs(entities) do
+      log('entities[' .. id .. ']: ' .. entity)
     end
 
-    for k, v in pairs(myShips) do
-      print('MOVE 11 10')
+    for id, ship in pairs(myShips) do
+      
+      -- dla kazdego statku znajdz najblizsza beczke, plyn do niej
+      local closestBarrelId = -1
+      local minDist = 9999
+      for id, dist in 
+        pairs(map(function(x) return x.pos:distance(ship.pos) end, barrels)) do
+        if dist <= minDist then
+          minDist = dist
+          closestBarrelId = id
+        end
+      end
+
+      print('MOVE %d %d' % 
+        {barrels[closestBarrelId].pos.x, barrels[closestBarrelId].pos.y})
     end  
   end
 end
+
+agent()

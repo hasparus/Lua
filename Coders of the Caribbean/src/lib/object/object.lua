@@ -1,11 +1,14 @@
-log("start")
+log = function(...)
+  io.stderr:write(...)
+  io.stderr:write('\n')
+end
 
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
     return a
   elseif type(b) == 'table' then
-    return string.format(a, unpack(b))
+    return string.format(a, table.unpack(b))
   else
     return string.format(a, b)
   end
@@ -24,7 +27,7 @@ end
 ---[[ Set indirect metatable. [Chain calls, lookup through __index].
 local metamethods = { --no index nor newindex
   '__add', '__sub', '__mul', '__div', '__mod', '__pow', '__unm', '__concat', 
-  '__len', '__eq', '__lt', '__le', '__call', '__gc', '__tostring'
+  '__len', '__eq', '__lt', '__le', '__call', '__tostring'
 }
 
 -- kudos kikito@stackoverflow

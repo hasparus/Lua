@@ -1,5 +1,3 @@
-log('before read4')
-
 local read4 = function(next) 
   local results = {}
   for i = 1, 4 do
@@ -21,7 +19,7 @@ function agent()
     local myShips = {}
     local enemies = {}
     local barrels = {}
-
+    
     for i = 1, entityCount do
         local next_token = string.gmatch(io.read(), "[^%s]+")
         entity = Entity.new {}
@@ -47,12 +45,27 @@ function agent()
         entities[entity.Id] = entity
     end
 
-    for k, v in pairs(entities) do
-      log('entity ' .. k .. ' : ' .. v)
+    for id, entity in pairs(entities) do
+      log('entities[' .. id .. ']: ' .. entity)
     end
 
-    for k, v in pairs(myShips) do
-      print('MOVE 11 10')
+    for id, ship in pairs(myShips) do
+      
+      -- dla kazdego statku znajdz najblizsza beczke, plyn do niej
+      local closestBarrelId = -1
+      local minDist = 9999
+      for id, dist in 
+        pairs(map(function(x) return x.pos:distance(ship.pos) end, barrels)) do
+        if dist <= minDist then
+          minDist = dist
+          closestBarrelId = id
+        end
+      end
+
+      print('MOVE %d %d' % 
+        {barrels[closestBarrelId].pos.x, barrels[closestBarrelId].pos.y})
     end  
   end
 end
+
+agent()
