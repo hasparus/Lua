@@ -1,3 +1,5 @@
+log('before read4')
+
 local read4 = function(next) 
   local results = {}
   for i = 1, 4 do
@@ -5,6 +7,8 @@ local read4 = function(next)
   end
   return table.unpack(results)
 end
+
+Entity = declareClass('Entity', Object)
 
 function agent()
   while true do
@@ -20,7 +24,7 @@ function agent()
 
     for i = 1, entityCount do
         local next_token = string.gmatch(io.read(), "[^%s]+")
-        entity = {}
+        entity = Entity.new {}
 
         entity.Id = tonumber(next_token())
         entity.type = next_token()

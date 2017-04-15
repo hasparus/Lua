@@ -3,10 +3,12 @@ CraterTest = require 'src.lib.crater_test.crater_test'
 
 local simpleTests = {
   [[ Object.new{name = 'o1', value = 17} ]],
-  [[ Object.new{name = 'o1', value = 17}['name'] ]],
-  [[ Object.new{name = 'o1', value = 17}.value ]],
-  [[ Object{k = '12'}['k'] ]],
-  [[ tostring(Object{k = '12', x = 5}) ]]
+  {[[ Object.new{name = 'o1', value = 17}['name'] ]], {shouldBe = 'o1'}},
+  {[[ Object.new{name = 'o1', value = 17}.value ]], {shouldBe = 17}},
+  {[[ Object{k = '12'}['k'] ]], {shouldBe = '12'}},
+  [[ tostring(Object{k = '12', x = 5, __showAllKeys = true}) ]],
+  {[[ Object{k = '12', x = 5}.__type ]], {shouldBe = 'object'}},
+  {[[ Object{k = '12', x = 5} ]], }
 }
 
 local complexTests = {

@@ -1,3 +1,5 @@
+log("start")
+
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
@@ -7,6 +9,15 @@ getmetatable("").__mod = function(a, b)
   else
     return string.format(a, b)
   end
+end
+--]]
+
+---[[ print strings with quotes
+tostringverbose = function(x)
+  if type(x) == 'string' then
+    return '"' .. x .. '"'
+  end
+  return tostring(x)
 end
 --]]
 
@@ -43,10 +54,8 @@ setmetatable(Object, mt.Object)
 --]]
 
 ---[[ Factory function and constructor syntax:
-function Object.new(args, params)
-  local self = {}
-  if not params or 
-     not params.notype then self.__type = 'object' end 
+function Object.new(args)
+  local self = { __type = 'object' }
   for k, v in pairs(args) do
     self[k] = v
   end
@@ -59,18 +68,28 @@ mt.Object.__call = function(table, ...) return table.new(...) end
 
 ---[[ __tostring and __concat
 mt.object.__tostring = function(obj)
+  local joinSpecials = false
   local res = {}
+  local specials = {}
   local n = 0
   for k, v in pairs(obj) do
-    n = n + 1
-    local vstring
-    if (type(v) == type('string')) then
-      vstring = "'" .. v .. "'"
+    local s = tostring(k) .. ' = ' .. tostringverbose(v)
+    if k:match('^__') then
+      specials[#specials + 1] = s
+      if k == '__showAllKeys' then joinSpecials = true end
     else
-      vstring = tostring(v)
+      n = n + 1
+      res[n] = s
     end
-    res[n] = tostring(k) .. ' = ' .. vstring
   end
+
+  if joinSpecials then
+    for _, v in ipairs(specials) do
+      n = n + 1
+      res[n] = v 
+    end
+  end
+
   return '{ ' .. table.concat(res, ', ') .. ' }'
 end
 

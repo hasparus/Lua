@@ -1,6 +1,7 @@
 require 'src.lib.object.object'
 require 'src.lib.console_color'
 
+local EPSILON = 0.000001
 local CraterTest = declareClass('CraterTest', Object)
 
 CraterTest.new = function(name, simpleTests, complexTests) 
@@ -14,7 +15,7 @@ end
 
 local check = function(res, conditions)
   if conditions == nil then 
-    return Console.Colorize('white', 'PASSED')
+    return Console.colorize('white', 'PASSED')
   end
 
   local accu
@@ -24,18 +25,31 @@ local check = function(res, conditions)
     function()
       accu = conditions.shouldBe
       return not accu or
-        math.type(res) == 'float' and math.abs(res - accu) < 0.000001 or
+        math.type(res) == 'float' and math.abs(res - accu) < EPSILON or
         res == accu 
+    end,
+    function()
+      accu = conditions.shouldntBe
+      return not accu or 
+        math.type(res) == 'float' and math.abs(res - accu) > EPSILON or
+        res ~= accu
+    end,
+    function()
+      accu = conditions.isNil
+      return not accu or res == nil 
     end
   }) do
     passed = passed and fun()
   end
   
-  if passed then 
-    return Console.Colorize('green', 'PASSED')
-  else 
-    return Console.Colorize('red', 'FAILED')
-  end 
+  return passed
+end
+
+local colorizePassed = function(x)
+  return
+    type(x) ~= 'boolean' and x or 
+    x and Console.colorize('green', 'PASSED') or
+    Console.colorize('red', 'FAILED')
 end
 
 local doSimpleTest = function(i, v)
@@ -49,23 +63,23 @@ local doSimpleTest = function(i, v)
   end
   load('res = ' .. case)()
   local passed = check(res, conditions)
-  print(Console.Colorize('white', ' | %3d | ' % i) 
-          .. passed,
+  print(Console.colorize('white', ' | %3d | ' % i) 
+          .. colorizePassed(passed),
         '%60s' % case,
-        Console.Colorize('cyan', ' ~~> '), 
-        res)
+        Console.colorize('cyan', ' ~~> '), 
+        tostringverbose(res))
   if conditions ~= nil and not passed then
-    print(Console.Colorize('white', ' | --> | ') ..
-          Console.Colorize('yellow', tostring(Object.new(conditions, {notype = true}))))
+    print(Console.colorize('white', ' | --> | ') ..
+          Console.colorize('yellow', tostring(Object.new(conditions, {notype = true}))))
   end
 end
 
 CraterTest.execute = function(self)
-  print(Console.Colorize('gray', [[
+  print(Console.colorize('gray', [[
 ~.~^~.~^~.~^~.~^~.~^~.~^~.~^~.~  
 Running %s tests:
 _______________________________]] % 
-  Console.Colorize('pink', self.name)))
+  Console.colorize('pink', self.name)))
 
   for i, v in ipairs(self.simpleTests) do
     doSimpleTest(i, v)
