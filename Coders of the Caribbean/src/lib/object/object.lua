@@ -1,23 +1,8 @@
----[[
-local makeNameClassy = function(name)
-  if type(name) ~= 'string' then error('wtf, wrong class name') end
-  local firstLetter = name:sub(1, 1)
-  local tail = name:sub(2, -1)
-  return (firstLetter:upper() .. tail), (firstLetter:lower() .. tail)
-end
-
-declareClass = function(name, super)
-  local className, objectName = makeNameClassy(name)
-  
-end
---]]
-
-
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
     return a
-  elseif type(b) == "table" then
+  elseif type(b) == 'table' then
     return string.format(a, unpack(b))
   else
     return string.format(a, b)
@@ -37,8 +22,8 @@ function setindirectmetatable(t, mt)
     rawset(mt, m, rawget(mt,m) or function(...)
       local supermt = getmetatable(mt) or {}
       local index = supermt.__index
-      if(type(index)=='function') then return index(t,m)(...) end
-      if(type(index)=='table') then return index[m](...) end
+      if type(index) == 'function' then return index(t,m)(...) end
+      if type(index) == 'table' then return index[m](...) end
       return nil
     end)
   end
@@ -47,7 +32,7 @@ function setindirectmetatable(t, mt)
 end
 --]]
 
-Object = {}
+Object = { __type = 'Object' }
 if mt == nil then mt = {} end
 
 ---[[ Initializing tables.
@@ -59,7 +44,7 @@ setmetatable(Object, mt.Object)
 
 ---[[ Factory function and constructor syntax:
 function Object.new(args)
-  local self = {}
+  local self = { __type = 'object' }
   for k, v in pairs(args) do
     self[k] = v
   end
@@ -93,3 +78,39 @@ end
 --]]
 
 
+
+---[[ declareClass helper
+local makeNameClassy = function(name)
+  if type(name) ~= 'string' then error('wtf, wrong class name') end
+  local firstLetter = name:sub(1, 1)
+  local tail = name:sub(2, -1)
+  return (firstLetter:upper() .. tail), (firstLetter:lower() .. tail)
+end
+
+-- usage: A = declareClass('A', 'superclassA', privateMetatable)
+declareClass = function(name, super, meta)
+  if super == null then
+    super = Object
+  end
+  if meta == null then
+    if type(mt) ~= 'table' then 
+      error('hey, global metatable store is not present!') 
+    else
+      meta = mt
+    end
+  end
+
+  local className, instanceName = makeNameClassy(name)
+  local superClassName, superInstanceName =
+    makeNameClassy(super.__type)
+  local class = { __type = className }
+
+  meta[className] = { __index = super }
+  meta[instanceName] = { __index = class }
+  setmetatable(meta[className], { __index = meta[superClassName] })
+  setmetatable(meta[instanceName], { __index = meta[superInstanceName]})
+  setindirectmetatable(class, meta[className])
+
+  return class
+end
+--]]

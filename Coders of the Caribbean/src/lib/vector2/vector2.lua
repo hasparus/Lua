@@ -1,19 +1,9 @@
 require 'src.lib.object.object'
 
-Vector2 = {}
-
-mt.Vector2 = {}
-mt.Vector2.__index = Object
-setmetatable(mt.Vector2, { __index = mt.Object }) 
-
-mt.vector2 = {}
-mt.vector2.__index = Vector2
-setmetatable(mt.vector2, { __index = mt.object })
-
-setindirectmetatable(Vector2, mt.Vector2)
+Vector2 = declareClass('Vector2', Object)
 
 function Vector2.new(x, y)
-  local self = {}
+  local self = { __type = 'vector2' }
   self.x = x
   self.y = y
   setindirectmetatable(self, mt.vector2)
