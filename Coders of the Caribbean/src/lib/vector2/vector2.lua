@@ -20,6 +20,10 @@ end
 function Vector2:magnitude()
   return math.sqrt(Vector2.dotProduct(self, self))
 end
+
+function Vector2:distance(u)
+  return (self - u):magnitude()
+end
 --]]
 
 ---[[ mt.vector2 stuff
@@ -29,6 +33,10 @@ end
 
 mt.vector2.__unm = function(v)
   return Vector2(-v.x, -v.y)
+end
+
+mt.vector2.__sub = function(v, u)
+  return v + (-u)
 end
 --]]
 
