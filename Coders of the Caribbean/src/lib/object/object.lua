@@ -1,3 +1,18 @@
+---[[
+local makeNameClassy = function(name)
+  if type(name) ~= 'string' then error('wtf, wrong class name') end
+  local firstLetter = name:sub(1, 1)
+  local tail = name:sub(2, -1)
+  return (firstLetter:upper() .. tail), (firstLetter:lower() .. tail)
+end
+
+declareClass = function(name, super)
+  local className, objectName = makeNameClassy(name)
+  
+end
+--]]
+
+
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
@@ -16,6 +31,7 @@ local metamethods = { --no index nor newindex
   '__len', '__eq', '__lt', '__le', '__call', '__gc', '__tostring'
 }
 
+-- kudos kikito@stackoverflow
 function setindirectmetatable(t, mt) 
   for _,m in ipairs(metamethods) do
     rawset(mt, m, rawget(mt,m) or function(...)

@@ -1,5 +1,5 @@
-ObjectTest = require 'src.lib.object.test'
-Vector2Test = require 'src.lib.vector2.test'
+objectTest = require 'src.lib.object.test'
+vector2Test = require 'src.lib.vector2.test'
 
-ObjectTest.execute()
-Vector2Test.execute()
+objectTest:execute()
+vector2Test:execute()

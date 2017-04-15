@@ -4,12 +4,11 @@ Vector2 = {}
 
 mt.Vector2 = {}
 mt.Vector2.__index = Object
-setmetatable(mt.Vector2, { __index = mt.Object }) -- nie dziala
-                                                  -- chciałbym odziedziczyć mt.Object.__call
+setmetatable(mt.Vector2, { __index = mt.Object }) 
 
 mt.vector2 = {}
 mt.vector2.__index = Vector2
-setmetatable(mt.vector2, { __index = mt.object }) -- nie dziala
+setmetatable(mt.vector2, { __index = mt.object })
 
 setindirectmetatable(Vector2, mt.Vector2)
 

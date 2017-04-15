@@ -20,8 +20,8 @@ CraterTest.execute = function(self)
   print([[
     --------------------------
     Running %s tests: 
-  ]] % self.name)
-  for i, v in ipairs(simpleTests) do
+  ]] .. "%s" % self.name)
+  for i, v in ipairs(self.simpleTests) do
     load('res = ' .. v)()
     print(string.format('| %3d | ', i),
           string.format('%60s', v),
@@ -29,7 +29,7 @@ CraterTest.execute = function(self)
           res)
   end
 
-  for i, fun in ipairs(complexTests) do
+  for i, fun in ipairs(self.complexTests) do
     fun()
   end
 end 

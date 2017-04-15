@@ -1,4 +1,5 @@
 require 'src.lib.object.object'
+CraterTest = require 'src.lib.crater_test.crater_test'
 
 local simpleTests = {
   [[ Object.new{name = 'o1', value = 17} ]],
@@ -15,4 +16,4 @@ local complexTests = {
   end,
 }
 
-return TestExecutor.new('Object', simpleTests, complexTests)
+return CraterTest.new('Object', simpleTests, complexTests)
