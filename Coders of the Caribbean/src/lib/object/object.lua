@@ -19,7 +19,6 @@ function setindirectmetatable(t, mt)
 end
 --]]
 
-
 Object = {}
 if mt == nil then mt = {} end
 
