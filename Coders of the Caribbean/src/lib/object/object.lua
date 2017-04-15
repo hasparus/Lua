@@ -1,5 +1,26 @@
-Object = {}
+---[[ Set indirect metatable. [Chain calls, lookup through __index].
+local metamethods = { --no index nor newindex
+  '__add', '__sub', '__mul', '__div', '__mod', '__pow', '__unm', '__concat', 
+  '__len', '__eq', '__lt', '__le', '__call', '__gc', '__tostring'
+}
 
+function setindirectmetatable(t, mt) 
+  for _,m in ipairs(metamethods) do
+    rawset(mt, m, rawget(mt,m) or function(...)
+      local supermt = getmetatable(mt) or {}
+      local index = supermt.__index
+      if(type(index)=='function') then return index(t,m)(...) end
+      if(type(index)=='table') then return index[m](...) end
+      return nil
+    end)
+  end
+
+  return setmetatable(t, mt)
+end
+--]]
+
+
+Object = {}
 if mt == nil then mt = {} end
 
 ---[[ Initializing tables.
