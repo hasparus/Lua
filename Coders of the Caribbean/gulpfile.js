@@ -1,8 +1,9 @@
 'use strict';
 
 const gulp = require('gulp');
-const concat = require("gulp-concat");
- 
+const concat = require('gulp-concat');
+const removeLines = require('gulp-remove-lines');
+
 const luafiles = [
   './src/lib/object/object.lua',
   './src/lib/vector2/vector2.lua',
@@ -12,6 +13,7 @@ const luafiles = [
 gulp.task('concat-lua', function() {
   return gulp.src(luafiles)
     .pipe(concat({ path: 'joint.lua' }))
+    .pipe(removeLines({ filters: [/(require.*)+/] }))
     .pipe(gulp.dest('./'));
 });
 

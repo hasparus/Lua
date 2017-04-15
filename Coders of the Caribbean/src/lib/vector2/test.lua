@@ -6,7 +6,8 @@ local Vector2Test = {}
 local simpleTests = {
   [[ Vector2.new(5, 7) ]],
   [[ Vector2.new(5, 7).y ]],
-  [[ Vector2(5, 7).x ]]
+  [[ Vector2(5, 7).x ]],
+  [[ Vector2(3, 4):magnitude() ]]
 }
 
 local complexTests = {
