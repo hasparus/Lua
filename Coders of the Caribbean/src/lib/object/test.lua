@@ -1,7 +1,5 @@
 require 'src.lib.object.object'
 
-local ObjectTest = {}
-
 local simpleTests = {
   [[ Object.new{name = 'o1', value = 17} ]],
   [[ Object.new{name = 'o1', value = 17}['name'] ]],
@@ -17,18 +15,4 @@ local complexTests = {
   end,
 }
 
-ObjectTest.execute = function()
-  print('Running Object tests: ')
-  for i, v in ipairs(simpleTests) do
-    load('res = ' .. v)()
-    print(string.format('| %3d | ', i),
-      string.format('%60s', v),
-      '~~>', res)
-  end
-
-  for i, fun in ipairs(complexTests) do
-    fun()
-  end
-end
-
-return ObjectTest
+return TestExecutor.new('Object', simpleTests, complexTests)
