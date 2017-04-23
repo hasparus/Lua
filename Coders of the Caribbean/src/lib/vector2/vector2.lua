@@ -38,6 +38,19 @@ end
 mt.vector2.__sub = function(v, u)
   return v + (-u)
 end
+
+mt.vector2.__mul = function(v, a)
+  if type(a) == 'number' then
+    return Vector2(a * v.x, a * v.y)
+  elseif type(a) == 'table' and a.__type == 'vector2' then
+    return v:dotProduct(a)
+  end
+  error("__mul wrong params")
+end
+
+mt.vector2.__eq = function(v, u)
+  return v.x == u.x and v.y == u.y
+end
 --]]
 
 

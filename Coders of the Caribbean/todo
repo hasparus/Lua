@@ -1,0 +1,10 @@
+implement a-star to sail around the map?
+cache positions from last turn to calculate directions cannonballs are flying and dodge them mby?
+use directions and speed to aim
+
+read about goal oriented behaviour
+
+take course and shoot in the meantime
+you can shoot every second turn
+
+dodge cannonballs

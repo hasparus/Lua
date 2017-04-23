@@ -1,8 +1,3 @@
-log = function(...)
-  io.stderr:write(...)
-  io.stderr:write('\n')
-end
-
 ---[[ Ruby style string interpolation
 getmetatable("").__mod = function(a, b)
   if not b then
@@ -77,7 +72,7 @@ mt.object.__tostring = function(obj)
   local n = 0
   for k, v in pairs(obj) do
     local s = tostring(k) .. ' = ' .. tostringverbose(v)
-    if k:match('^__') then
+    if type(k) == 'string' and k:match('^__') then
       specials[#specials + 1] = s
       if k == '__showAllKeys' then joinSpecials = true end
     else
@@ -138,3 +133,16 @@ declareClass = function(name, super, meta)
   return class
 end
 --]]
+
+log = function(s)
+  if type(s) == 'table' then 
+    if not s.__type then
+      io.stderr:write(tostring(Object.new(s)))
+    else
+      io.stderr:write(tostring(s))
+    end
+  else
+    io.stderr:write(tostring(s))
+  end
+  io.stderr:write('\n')
+end
